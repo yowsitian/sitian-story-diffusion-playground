@@ -1109,6 +1109,8 @@ with gr.Blocks(css=css) as demo:
                         [
                             "No typesetting (default)",
                             "Four Pannel",
+                            "Six Pannel",
+                            "Eight Pannel",
                             "Classic Comic Style",
                         ],
                         value="Classic Comic Style",
