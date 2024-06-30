@@ -98,6 +98,10 @@ def get_comic(images,types = "4panel",captions = [],font = None,pad_image = None
         return images
     elif types == "Four Pannel":
         return get_comic_4panel(images,captions,font,pad_image)
+    elif types == "Six Pannel":
+        return get_comic_6panel(images,captions,font,pad_image)
+    elif types == "Eight Pannel":
+        return get_comic_8panel(images,captions,font,pad_image)
     else: # "Classic Comic Style"
         return get_comic_classical(images,captions,font,pad_image)
 
@@ -144,6 +148,43 @@ def get_comic_4panel(images,captions = [],font = None,pad_image = None):
     assert len(images)%4 == 0
     for i in range(len(images)//4):
         comics.append(combine_images_vertically_with_resize([combine_images_horizontally(images[i*4:i*4+2]), combine_images_horizontally(images[i*4+2:i*4+4])]))
+    
+    return comics
+
+def get_comic_6panel(images,captions = [],font = None,pad_image = None):
+    if pad_image == None:
+        raise ValueError("pad_image is None")
+    pad_image = pad_image.resize(images[0].size, Image.LANCZOS)
+    images = [add_white_border(image) for image in images]
+    assert len(captions) == len(images)
+    for i,caption in enumerate(captions):
+        images[i] = add_caption(images[i],caption,font = font)
+    images_nums = len(images)
+    pad_nums = int((6 - images_nums % 6) % 6) 
+    images = images + [pad_image for _ in range(pad_nums)]
+    comics = []
+    assert len(images)%6 == 0
+    
+    for i in range(len(images)//6):
+        comics.append(combine_images_vertically_with_resize([combine_images_horizontally(images[i*6:i*6+2]), combine_images_horizontally(images[i*6+2:i*6+4]), combine_images_horizontally(images[i*6+4:i*6+6])]))
+    
+    return comics
+
+def get_comic_8panel(images,captions = [],font = None,pad_image = None):
+    if pad_image == None:
+        raise ValueError("pad_image is None")
+    pad_image = pad_image.resize(images[0].size, Image.LANCZOS)
+    images = [add_white_border(image) for image in images]
+    assert len(captions) == len(images)
+    for i,caption in enumerate(captions):
+        images[i] = add_caption(images[i],caption,font = font)
+    images_nums = len(images)
+    pad_nums = int((8 - images_nums % 8) % 8) 
+    images = images + [pad_image for _ in range(pad_nums)]
+    comics = []
+    assert len(images)%8 == 0
+    for i in range(len(images)//8):
+        comics.append(combine_images_vertically_with_resize([combine_images_horizontally(images[i*8:i*8+2]), combine_images_horizontally(images[i*8+2:i*8+4]),combine_images_horizontally(images[i*8+4:i*8+6]),combine_images_horizontally(images[i*8+6:i*8+8])]))
     
     return comics
 
